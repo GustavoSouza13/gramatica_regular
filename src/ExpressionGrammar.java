@@ -12,12 +12,114 @@ public class ExpressionGrammar {
         grammar.put(variable, sequences);
     }
 
-    public boolean testSentence(String sentence) {
+    public void testSentence(String sentence) {
         Map<String, Set<String>> initials = grammar.entrySet().stream()
                 .filter(entry -> entry.getKey().equals("S"))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
-        return testSentence(initials, sentence, sentence.length() == 1) == sentence.length();
+        boolean accept = testSentence(initials, sentence, sentence.length() == 1) == sentence.length();
+        System.out.println(accept ? String.format("%s é aceita.", sentence) : String.format("%s não é aceita.", sentence));
+    }
+
+    public void generateCpf() {
+        generateCpf("XXXPXXXPXXXTXX");
+    }
+
+    public void generateEmail() {
+        generateEmail("XXXXXXPXXNNADCB");
+    }
+
+    public void generatePhoneNumber() {
+        generatePhoneNumber("XXNXXXXTXXXX");
+    }
+
+    public void generateCpf(String sentence) {
+        this.grammar = new HashMap<>();
+        addOnGrammar("X", "0");
+        addOnGrammar("X", "1");
+        addOnGrammar("X", "2");
+        addOnGrammar("X", "3");
+        addOnGrammar("X", "4");
+        addOnGrammar("X", "5");
+        addOnGrammar("X", "6");
+        addOnGrammar("X", "7");
+        addOnGrammar("X", "8");
+        addOnGrammar("X", "9");
+        addOnGrammar("P", ".");
+        addOnGrammar("T", "-");
+
+        System.out.printf("CPF: %s\n", generate(sentence));
+    }
+
+    public void generateEmail(String sentence) {
+        this.grammar = new HashMap<>();
+        addOnGrammar("X", "a");
+        addOnGrammar("X", "b");
+        addOnGrammar("X", "c");
+        addOnGrammar("X", "d");
+        addOnGrammar("X", "e");
+        addOnGrammar("X", "f");
+        addOnGrammar("X", "g");
+        addOnGrammar("X", "h");
+        addOnGrammar("X", "i");
+        addOnGrammar("X", "j");
+        addOnGrammar("X", "k");
+        addOnGrammar("X", "i");
+        addOnGrammar("X", "j");
+        addOnGrammar("X", "k");
+        addOnGrammar("X", "l");
+        addOnGrammar("X", "m");
+        addOnGrammar("X", "n");
+        addOnGrammar("X", "o");
+        addOnGrammar("X", "p");
+        addOnGrammar("X", "q");
+        addOnGrammar("X", "r");
+        addOnGrammar("X", "s");
+        addOnGrammar("X", "t");
+        addOnGrammar("X", "u");
+        addOnGrammar("X", "v");
+        addOnGrammar("X", "w");
+        addOnGrammar("X", "x");
+        addOnGrammar("X", "y");
+        addOnGrammar("X", "z");
+        addOnGrammar("N", "1");
+        addOnGrammar("N", "2");
+        addOnGrammar("N", "3");
+        addOnGrammar("N", "4");
+        addOnGrammar("N", "5");
+        addOnGrammar("N", "6");
+        addOnGrammar("N", "7");
+        addOnGrammar("N", "8");
+        addOnGrammar("N", "9");
+        addOnGrammar("P", ".");
+        addOnGrammar("A", "@");
+        addOnGrammar("D", "gmail");
+        addOnGrammar("D", "hotmail");
+        addOnGrammar("D", "outlook");
+        addOnGrammar("C", "Pcom");
+        addOnGrammar("C", "Pcom");
+        addOnGrammar("B", "Pbr");
+        addOnGrammar("B", "&");
+
+        System.out.printf("E-mail: %s\n", generate(sentence));
+    }
+
+    public void generatePhoneNumber(String sentence) {
+        this.grammar = new HashMap<>();
+        addOnGrammar("X", "0");
+        addOnGrammar("X", "1");
+        addOnGrammar("X", "2");
+        addOnGrammar("X", "3");
+        addOnGrammar("X", "4");
+        addOnGrammar("X", "5");
+        addOnGrammar("X", "6");
+        addOnGrammar("X", "7");
+        addOnGrammar("X", "8");
+        addOnGrammar("X", "9");
+        addOnGrammar("N", "9");
+        addOnGrammar("T", "-");
+
+        System.out.printf("Telefone: %s\n", generate(sentence));
     }
 
     private int testSentence(Map<String, Set<String>> grammar, String sentence, boolean canBeTerminal) {
@@ -99,5 +201,24 @@ public class ExpressionGrammar {
         String grammarValueSentence = grammarValue.replaceAll("[A-Z]*", "");
         // Valida se o grammarValue é igual a sentence ou se possui somente letras maiúsculas (variáveis)
         return grammarValueSentence.equals(sentence) || grammarValue.replaceAll("[a-z]*", "").matches("[A-Z]+");
+    }
+
+    private String generate(String sentence) {
+        String result = "";
+        for (int i = 0; i < sentence.length(); i++) {
+            String sentencePart = sentence.substring(i, i + 1);
+
+            Set<String> grammarSentences = grammar.get(sentencePart);
+            if (grammarSentences == null || grammarSentences.isEmpty()) {
+                return null;
+            } else {
+                String grammarSentence = new ArrayList<>(grammarSentences).get((int) Math.floor(Math.random() * grammarSentences.size()));
+                for (String grammarSentencePart : grammarSentence.split("")) {
+                    result += grammarSentencePart.matches("[A-Z]+") ? generate(grammarSentencePart) : grammarSentencePart;
+                }
+            }
+        }
+
+        return result.replace("&", "");
     }
 }
