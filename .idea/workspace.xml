@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="21caeb11-7e93-450d-913e-3bad6b0f0802" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/gramatica-regular/ExpressionGrammar.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/gramatica-regular/ExpressionGrammar.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/gramatica-regular/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/gramatica-regular/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ExpressionGrammar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ExpressionGrammar.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
     </list>
@@ -53,15 +51,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -83,7 +79,8 @@
       <workItem from="1652312165369" duration="12131000" />
       <workItem from="1652357730529" duration="22000" />
       <workItem from="1652566653900" duration="25304000" />
-      <workItem from="1652594574155" duration="5457000" />
+      <workItem from="1652594574155" duration="5537000" />
+      <workItem from="1652623974644" duration="4651000" />
     </task>
     <servers />
   </component>

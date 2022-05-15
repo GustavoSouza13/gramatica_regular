@@ -17,7 +17,7 @@ public class ExpressionGrammar {
                 .filter(entry -> entry.getKey().equals("S"))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
-        return testSentence(initials, sentence, false) == sentence.length();
+        return testSentence(initials, sentence, sentence.length() == 1) == sentence.length();
     }
 
     private int testSentence(Map<String, Set<String>> grammar, String sentence, boolean canBeTerminal) {
@@ -28,21 +28,20 @@ public class ExpressionGrammar {
                 String sentencePart = sentence.substring(0, i);
 
                 if (grammarSentences.stream().anyMatch(grammarSentence -> testSentence(grammarSentence, sentencePart))) {
-                    if (grammarSentences.stream().anyMatch(grammarSentence -> grammarSentence.equals(sentencePart)) && canBeTerminal) {
+                    if (grammarSentences.stream().anyMatch(grammarSentence -> grammarSentence.equals(sentencePart)) &&
+                            (canBeTerminal || i == sentence.length())) {
                         return i; // Encontrou um terminal para o sentencePart e retorna quantos loops foram precisos (sentencePart.length())
                     } else {
                         // Filtra as grammarSentences que possuem o sentencePart atual ou apenas variáveis
                         for (String grammarSentence : grammarSentences.stream().filter(grammarSentence -> testSentence(grammarSentence, sentencePart)).collect(Collectors.toSet())) {
 //                        // Volta para a sentence original, quantityFindedPositions é resetado e vai para a próxima
 //                        // grammerSentence possível.
-//                            sentence = localSentence;
-//                            quantityFindedPositions = 0;
                             if (quantityFindedPositions == 0) {
                                 for (String grammarVariableSentence : grammarSentence.split("")) {
                                     // Valida se o grammarVariableSentence é equivalente a um terminal entre as variáveis,
                                     // por exemplo, XXtY. Se for, verificar se ele é igual a sentence buscada, se não,
                                     // não aceita.
-                                    if (grammarVariableSentence.matches("[a-z]+")) {
+                                    if (grammarVariableSentence.matches("[a-z]+") || grammarVariableSentence.equals("&")) {
                                         if (grammarVariableSentence.equals(sentence) || grammarVariableSentence.equals(sentencePart)) {
                                             sentence = sentence.substring(i);
                                             quantityFindedPositions += i;
@@ -59,23 +58,21 @@ public class ExpressionGrammar {
                                                 .filter(entry -> grammarVariableSentence.equals(entry.getKey()))
                                                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
-                                        boolean isVariable = grammarVariableSentence.matches("[A-Z]+");
+                                        boolean isVariable = grammarSentence.replaceAll("[a-z]*", "").length() > 1; /*grammarVariableSentence.matches("[A-Z]+") && grammarVariableSentence.length() > 1*/;
                                         // Se a grammarSentence for igual a grammarValueVariables (só tiver variáveis),
                                         // ele validará a sentence atual, caso não, avança na sentence.
-                                        String nextSentence = isVariable ? sentence : sentence.substring(Math.min(i + 1, sentence.length())); // FIXME Pode ser que o sentence.substring(i + 1) de IndexOutOfBoundsException, se der, só colocar sentence.substring(Math.min(i + 1, sentence.length())) deve resolver.
+                                        String nextSentence = sentence; // FIXME Pode ser que o sentence.substring(i + 1) de IndexOutOfBoundsException, se der, só colocar sentence.substring(Math.min(i + 1, sentence.length())) deve resolver.
                                         if (nextSentence.isEmpty()) {
                                             // Aceita caso o waysFromVariable possuir {e} (epsilon), caso contrário, não aceita
-                                            if (new ArrayList<>(waysFromVariable.values()).stream().findFirst().orElse(new HashSet<>()).contains("&")) {
-                                                quantityFindedPositions++;
-                                            } else {
+                                            if (!new ArrayList<>(waysFromVariable.values()).stream().findFirst().orElse(new HashSet<>()).contains("&")) {
                                                 quantityFindedPositions = 0;
                                             }
                                         } else {
                                             // Chama o testSentence recursivamente para validar com o waysFromVariable, nextSentence e se pode ser terminal
-                                            int findedPosition = testSentence(waysFromVariable, nextSentence, isVariable || nextSentence.length() == 1);
-                                            if (findedPosition == 1 && findedPosition == nextSentence.length()) {
-                                                quantityFindedPositions++; // Aceita total.
-                                            } else if (findedPosition == 0) {
+                                            int findedPosition = testSentence(waysFromVariable, nextSentence, canBeTerminal || isVariable || nextSentence.length() == 1);
+                                            /*if (findedPosition == 1 && findedPosition == nextSentence.length()) {
+                                                return ++quantityFindedPositions; // Aceita total.
+                                            } else */if (findedPosition == 0) {
                                                 // Volta para a sentence original, quantityFindedPositions é resetado e vai para a próxima
                                                 // grammerSentence possível.
                                                 sentence = localSentence;
@@ -88,6 +85,14 @@ public class ExpressionGrammar {
                                             }
                                         }
                                     }
+                                }
+
+                                // Retorna caso tenha aceitado.
+                                if (quantityFindedPositions == localSentence.length() || quantityFindedPositions > 0 && canBeTerminal) {
+                                    return quantityFindedPositions;
+                                } else {
+                                    sentence = localSentence;
+                                    quantityFindedPositions = 0;
                                 }
                             }
                         }
