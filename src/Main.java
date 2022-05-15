@@ -13,13 +13,18 @@ public class Main {
 //        expressionGrammar.addOnGrammar("S", "b");
 //        expressionGrammar.addOnGrammar("S", "c");
 
-        expressionGrammar.addOnGrammar("S", "XXXY");
+        expressionGrammar.addOnGrammar("S", "XYX");
+        expressionGrammar.addOnGrammar("S", "XYd");
+//        expressionGrammar.addOnGrammar("S", "XY");
         expressionGrammar.addOnGrammar("X", "a");
         expressionGrammar.addOnGrammar("X", "b");
         expressionGrammar.addOnGrammar("X", "c");
-        expressionGrammar.addOnGrammar("Y", "XY");
-        expressionGrammar.addOnGrammar("Y", "{e}");
+        expressionGrammar.addOnGrammar("Y", "XZY");
+        expressionGrammar.addOnGrammar("Y", "XKY");
+        expressionGrammar.addOnGrammar("Y", "&");
+        expressionGrammar.addOnGrammar("Z", "aac");
+        expressionGrammar.addOnGrammar("K", "aa");
 
-        System.out.println(expressionGrammar.testSentence("bacacabcbacbacbabcbbcbcbcbccbaaaa"));
+        System.out.println(expressionGrammar.testSentence("baaa&aa"));
     }
 }
