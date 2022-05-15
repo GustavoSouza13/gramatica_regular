@@ -124,8 +124,8 @@ public class ExpressionGrammar {
 
     private int testSentence(Map<String, Set<String>> grammar, String sentence, boolean canBeTerminal) {
         String localSentence = sentence; // Somente para salvar qual era a sentence original, antes das mudanças que acontecem nos fors.
-        int quantityFindedPositions = 0; // 0 -> Não aceita, > 0 -> Aceita total (chamada original) ou parte (chamada recursiva).
-        for (Set<String> grammarSentences : grammar.values()) {
+        int quantityFindedPositions = 0; // 0 -> Não aceita, >0 -> Aceita total (chamada original) ou parte (chamada recursiva).
+        for (Set<String> grammarSentences : grammar.values()) { // TODO Acho que não precisaria desse for, já que ele executa a mesma coisa na linha 137
             for (int i = 1; i <= sentence.length(); i++) {
                 String sentencePart = sentence.substring(0, i);
 

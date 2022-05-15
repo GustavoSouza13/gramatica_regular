@@ -50,7 +50,13 @@ public class Main {
         expressionGrammar.testSentence("a");
         expressionGrammar.testSentence("a&");
 
-        System.out.println("\n-- Geradores autómáticos --");
+        System.out.println("\n-- Quarta Gramática Regular --");
+        expressionGrammar = new ExpressionGrammar();
+        expressionGrammar.addOnGrammar("S", "abc");
+
+        expressionGrammar.testSentence("abc");
+
+        System.out.println("\n-- Geradores automáticos --");
         expressionGrammar.generateCpf();
         expressionGrammar.generateEmail();
         expressionGrammar.generatePhoneNumber();
